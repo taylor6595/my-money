@@ -1,4 +1,4 @@
-const CACHE="my-money-v3";const ASSETS=["./","./index.html","./icon.svg","./manifest.webmanifest"];
+const CACHE="my-money-v4";const ASSETS=["./","./index.html","./icon.svg","./manifest.webmanifest"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));self.skipWaiting()});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(names=>Promise.all(names.filter(name=>name.startsWith("my-money-")&&name!==CACHE).map(name=>caches.delete(name)))).then(()=>self.clients.claim()))});
 self.addEventListener("message",event=>{if(event.data?.type==="SKIP_WAITING")self.skipWaiting()});
