@@ -34,7 +34,7 @@ const pendingIncome=()=>expectedForMonth().filter(p=>!incomePayment(p)).reduce((
 const linkedReduction=id=>state.tx.filter(t=>t.kind==="debt"&&t.debtId===id&&!t.historical).reduce((s,t)=>s+Number(t.principal??t.amount),0);
 const debtBalance=d=>Math.max(0,Number((d.balance-linkedReduction(d.id)).toFixed(2)));
 const syncDebtPickers=()=>{const opts=state.debts.map(d=>'<option value="'+safe(d.id)+'">'+safe(d.name)+' — '+fmt(debtBalance(d))+'</option>').join("");for(const id of ["txDebt","billDebt"]){const el=$(id),previous=el.value;el.innerHTML=(id==="billDebt"?'<option value="">No linked debt</option>':'<option value="">Select a debt</option>')+opts;el.value=state.debts.some(d=>d.id===previous)?previous:""};$("debtPicker").hidden=$("kind").value!=="debt";$("billDebtPicker").hidden=!["Affirm","Discover","Car payment"].includes($("billCategory").value)};
-const save=()=>{localStorage.setItem(K,JSON.stringify(state));render()};
+const save=()=>{if(!Array.isArray(state.expected))state.expected=[];localStorage.setItem(K,JSON.stringify(state));render()};
 function render(){
 $("headingMonth").textContent=new Date(state.month+"-02T12:00:00").toLocaleDateString("en-US",{month:"long",year:"numeric"});
 $("checking").textContent=fmt(checking());$("savings").textContent=fmt(savings());$("remaining").textContent=fmt(incomeReceived()-spent());
